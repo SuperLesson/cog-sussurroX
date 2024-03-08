@@ -13,7 +13,7 @@ from typing import Any
 compute_type = "float16"
 
 
-class ModelOutput(BaseModel):
+class Output(BaseModel):
     detected_language: str
     transcription: str
     segments: Any
@@ -47,7 +47,7 @@ class Predictor(BasePredictor):
             default=False,
         ),
         debug: bool = Input(description="Print out debug information.", default=False),
-    ) -> ModelOutput:
+    ) -> Output:
         """Run a single prediction on the model"""
         with torch.inference_mode():
             result = self.model.transcribe(
@@ -75,7 +75,7 @@ class Predictor(BasePredictor):
                 print(
                     f"max gpu memory allocated over runtime: {torch.cuda.max_memory_reserved() / (1024 ** 3):.2f} GB"
                 )
-        return ModelOutput(
+        return Output(
             transcription=transcription,
             segments=result["segments"],
             word_segments=result.get("word_segments"),
