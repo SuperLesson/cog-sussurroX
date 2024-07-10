@@ -1,6 +1,9 @@
-hf_models/**
-torch_models/**
-**.mp3
-**.wav
-.cog/**
-**/__pycache__/**
+hf_models/
+torch_models/
+whisperx.egg-info/
+**/__pycache__/
+.ipynb_checkpoints
+.idea
+venv
+hg_access_token.txt
+models/

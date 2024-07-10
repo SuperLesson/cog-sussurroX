@@ -1,4 +1,4 @@
-# Cog-sussurroX
+# whisperX on Replicate
 
 Cog predictor interface implementation of [WhisperX](https://github.com/m-bain/whisperX).
 
@@ -13,8 +13,6 @@ The cog model is available as [isinyaaa/whisperx](https://replicate.com/isinyaaa
     ```sh
     cog predict -i audio=@/path/to/audio/file [-i other_flag=val ...]
     ```
-
-You can check out the available flags through [Replicate](https://replicate.com/isinyaaa/whisperx).
 
 ## Model Information
 
