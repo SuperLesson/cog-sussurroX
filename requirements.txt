@@ -1,3 +1,4 @@
-torch==2.0.0
-torchaudio==2.0.0
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch==2.1.0+cu121
+torchaudio==2.1.0+cu121
 git+https://github.com/isinyaaa/whisperX.git@b27d7e8a88a1a8c55f2ca5fea216a3982f4d671f
