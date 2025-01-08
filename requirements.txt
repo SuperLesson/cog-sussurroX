@@ -1,6 +1,6 @@
 --extra-index-url https://download.pytorch.org/whl/cu121
-torch==2.1.0+cu121
-torchvision==0.16.0+cu121
-torchaudio==2.1.0+cu121
+torch==2.2.0+cu121
+torchaudio==2.2.0+cu121
+numpy==1.26.4
 pydub
-git+https://github.com/isinyaaa/whisperX.git@b27d7e8a88a1a8c55f2ca5fea216a3982f4d671f
+git+https://github.com/superlesson/whisperX.git@10b05fc43f71c74253833d415e4b7572141dd132

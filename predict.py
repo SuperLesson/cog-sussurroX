@@ -6,17 +6,17 @@ import os
 os.environ["HF_HOME"] = "/src/hf_models"
 os.environ["TORCH_HOME"] = "/src/torch_models"
 
-from cog import BasePredictor, Input, Path, BaseModel
-from pydub import AudioSegment
-from typing import Any, cast
-from whisperx.audio import N_SAMPLES, log_mel_spectrogram
-
 import gc
 import math
-import whisperx
 import tempfile
 import time
+from typing import Any, cast
+
 import torch
+import whisperx
+from cog import BaseModel, BasePredictor, Input, Path
+from pydub import AudioSegment
+from whisperx.audio import N_SAMPLES, log_mel_spectrogram
 
 WHISPER_ARCH = "large-v3"
 # change to "int8" if low on GPU mem (may reduce accuracy)
