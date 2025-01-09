@@ -2,5 +2,4 @@
 torch==2.2.0+cu121
 torchaudio==2.2.0+cu121
 numpy==1.26.4
-pydub
 git+https://github.com/superlesson/whisperX.git@10b05fc43f71c74253833d415e4b7572141dd132

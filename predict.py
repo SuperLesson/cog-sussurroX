@@ -8,6 +8,7 @@ os.environ["TORCH_HOME"] = "/src/torch_models"
 
 import gc
 import math
+import subprocess
 import tempfile
 import time
 from typing import Any, cast
@@ -15,7 +16,6 @@ from typing import Any, cast
 import torch
 import whisperx
 from cog import BaseModel, BasePredictor, Input, Path
-from pydub import AudioSegment
 from whisperx.audio import N_SAMPLES, log_mel_spectrogram
 
 WHISPER_ARCH = "large-v3"
@@ -209,7 +209,22 @@ class Predictor(BasePredictor):
 
 
 def get_audio_duration(file_path):
-    return len(AudioSegment.from_file(file_path))
+    result = subprocess.run(
+        [
+            "ffprobe",
+            "-i",
+            file_path,
+            "-show_entries",
+            "format=duration",
+            "-v",
+            "quiet",
+            "-of",
+            "csv=p=0",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    return float(result.stdout.strip())
 
 
 def detect_language(
@@ -296,18 +311,33 @@ def extract_audio_segment(input_file_path, start_time_ms, duration_ms):
         else input_file_path
     )
 
-    audio = AudioSegment.from_file(input_file_path)
+    tmp_out = Path(tempfile.NamedTemporaryFile(suffix=".wav", delete=False).name)
 
-    end_time_ms = start_time_ms + duration_ms
-    extracted_segment = audio[start_time_ms:end_time_ms]
+    subprocess.run(
+        [  # noqa: S607
+            "ffmpeg",
+            "-loglevel",
+            "quiet",
+            "-i",
+            input_file_path,
+            "-vn",
+            "-y",
+            "-acodec",
+            "pcm_s16le",
+            "-ac",
+            "1",
+            "-ar",
+            "16000",
+            "-ss",
+            start_time_ms / 1000,
+            "-t",
+            duration_ms / 1000,
+            tmp_out,
+        ],
+        stdout=subprocess.DEVNULL,
+    )
 
-    file_extension = input_file_path.suffix
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as temp_file:
-        temp_file_path = Path(temp_file.name)
-        extracted_segment.export(temp_file_path, format=file_extension.lstrip("."))
-
-    return temp_file_path
+    return tmp_out
 
 
 def distribute_segments_equally(total_duration, segments_duration, iterations):
